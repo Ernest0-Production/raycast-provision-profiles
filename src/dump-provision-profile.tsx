@@ -5,38 +5,40 @@ import { getMarkdown, DetailMetadata, ProfileActions } from "./components/Provis
 import { ProvisioningProfile } from "./types";
 
 type DumpProvisionProfileProps = {
-    arguments: {
-        filePath: string;
-    };
+  arguments: {
+    filePath: string;
+  };
 };
 
 export default function DumpProvisionProfile(props: DumpProvisionProfileProps) {
-    const {
-        data: profile,
-        isLoading,
-        error,
-    } = usePromise(
-        async (path: string): Promise<ProvisioningProfile> => {
-            return await parseProvisioningProfile(path);
-        },
-        [props.arguments.filePath],
-    );
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = usePromise(
+    async (path: string): Promise<ProvisioningProfile> => {
+      return await parseProvisioningProfile(path);
+    },
+    [props.arguments.filePath],
+  );
 
-    if (error) {
-        return <Detail markdown={`## Error\n\n\`\`\`\n${error.message}\n\`\`\``} />;
-    }
+  if (error) {
+    return <Detail markdown={`## Error\n\n\`\`\`\n${error.message}\n\`\`\``} />;
+  }
 
-    return (
-        <Detail
-            isLoading={isLoading}
-            markdown={profile ? getMarkdown(profile) : ""}
-            navigationTitle={profile?.Name ?? "Loading..."}
-            metadata={profile && <DetailMetadata profile={profile} />}
-            actions={profile && (
-                <ActionPanel>
-                    <ProfileActions profile={profile} />
-                </ActionPanel>
-            )}
-        />
-    );
+  return (
+    <Detail
+      isLoading={isLoading}
+      markdown={profile ? getMarkdown(profile) : ""}
+      navigationTitle={profile?.Name ?? "Loading..."}
+      metadata={profile && <DetailMetadata profile={profile} />}
+      actions={
+        profile && (
+          <ActionPanel>
+            <ProfileActions profile={profile} />
+          </ActionPanel>
+        )
+      }
+    />
+  );
 }
