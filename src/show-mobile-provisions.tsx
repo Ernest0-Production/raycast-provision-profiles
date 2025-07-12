@@ -6,8 +6,8 @@ import * as os from "os";
 import { ProvisioningProfile } from "./types";
 import { parseProvisioningProfile } from "./utils/parser";
 import { useState } from "react";
-import { DeviceList } from "./components/DeviceList";
 import { getProfileTypeColor } from "./utils/helpers";
+import { getMarkdown, ListDetailMetadata, ProfileActions } from "./components/ProvisionProfileDetails";
 
 const PROFILES_PATH = path.join(os.homedir(), "Library/MobileDevice/Provisioning Profiles");
 
@@ -55,10 +55,10 @@ function ProfileListItem({
   const accessories: List.Item.Accessory[] = isShowingDetail
     ? []
     : [
-        { tag: { value: profile.Platform.join(", "), color: Color.SecondaryText } },
-        { tag: { value: profile.Type, color: getProfileTypeColor(profile.Type) } },
-        ...(profile.ExpirationDate < new Date() ? [{ tag: { value: "Expired", color: Color.Red } }] : []),
-      ];
+      { tag: { value: profile.Platform.join(", "), color: Color.SecondaryText } },
+      { tag: { value: profile.Type, color: getProfileTypeColor(profile.Type) } },
+      ...(profile.ExpirationDate < new Date() ? [{ tag: { value: "Expired", color: Color.Red } }] : []),
+    ];
 
   const hasDevices = profile.ProvisionedDevices && profile.ProvisionedDevices.length > 0;
   const keywords = [
@@ -79,52 +79,7 @@ function ProfileListItem({
       accessories={accessories}
       keywords={keywords}
       quickLook={{ path: profile.filePath }}
-      detail={
-        <List.Item.Detail
-          markdown={[
-            "## Entitlements",
-            "",
-            "```json",
-            JSON.stringify(profile.Entitlements, null, 2),
-            "```",
-            "",
-            "## Certificates",
-            "",
-            profile.DeveloperCertificates.map(
-              (cert) => `- **${cert.subject.commonName}** (Expires: ${cert.validity.notAfter.toLocaleDateString()})`,
-            ).join("\n"),
-          ].join("\n")}
-          metadata={
-            <List.Item.Detail.Metadata>
-              <List.Item.Detail.Metadata.Label title="UUID" text={profile.UUID} />
-              <List.Item.Detail.Metadata.Separator />
-              <List.Item.Detail.Metadata.Label title="App ID Name" text={profile.AppIDName} />
-              {profile.Entitlements["application-identifier"] && (
-                <List.Item.Detail.Metadata.Label
-                  title="App Identifier"
-                  text={profile.Entitlements["application-identifier"]?.split(".").slice(1).join(".")}
-                />
-              )}
-              <List.Item.Detail.Metadata.Separator />
-              <List.Item.Detail.Metadata.Label title="Team Name" text={profile.TeamName} />
-              <List.Item.Detail.Metadata.Label title="Team Identifier" text={profile.TeamIdentifier[0]} />
-              {hasDevices && (
-                <>
-                  <List.Item.Detail.Metadata.Separator />
-                  <List.Item.Detail.Metadata.Label
-                    title="Devices"
-                    text={profile.ProvisionedDevices?.length.toString()}
-                  />
-                </>
-              )}
-
-              <List.Item.Detail.Metadata.Separator />
-              <List.Item.Detail.Metadata.Label title="Creation Date" text={profile.CreationDate.toLocaleString()} />
-              <List.Item.Detail.Metadata.Label title="Expiration Date" text={profile.ExpirationDate.toLocaleString()} />
-            </List.Item.Detail.Metadata>
-          }
-        />
-      }
+      detail={<List.Item.Detail markdown={getMarkdown(profile)} metadata={<ListDetailMetadata profile={profile} />} />}
       actions={
         <ActionPanel>
           <Action
@@ -132,30 +87,7 @@ function ProfileListItem({
             icon={Icon.AppWindowSidebarLeft}
             onAction={onToggleDetails}
           />
-          {hasDevices && (
-            <Action.Push
-              title="Show Devices"
-              icon={Icon.List}
-              target={<DeviceList deviceIds={profile.ProvisionedDevices!} />}
-            />
-          )}
-          <ActionPanel.Section>
-            <Action.ShowInFinder path={profile.filePath} shortcut={{ modifiers: ["cmd"], key: "o" }} />
-            <Action.ToggleQuickLook title="Quick Look" shortcut={{ modifiers: ["cmd"], key: "y" }} />
-            <Action.CopyToClipboard
-              title="Copy Path"
-              content={profile.filePath}
-              shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
-            />
-            <Action.CopyToClipboard title="Copy Uuid" content={profile.UUID} />
-            <Action.CopyToClipboard title="Copy Team ID" content={profile.TeamIdentifier[0]} />
-            {profile.Entitlements["application-identifier"] && (
-              <Action.CopyToClipboard
-                title="Copy Application Identifier"
-                content={profile.Entitlements["application-identifier"]}
-              />
-            )}
-          </ActionPanel.Section>
+          <ProfileActions profile={profile} />
         </ActionPanel>
       }
     />

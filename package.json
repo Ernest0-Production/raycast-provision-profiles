@@ -17,6 +17,20 @@
       "title": "Show Mobile Provisions",
       "description": "Display list of installed .mobileprovision files",
       "mode": "view"
+    },
+    {
+      "name": "dump-provision-profile",
+      "title": "Dump Provision Profile",
+      "description": "Dump a provision profile from a file path",
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "filePath",
+          "type": "text",
+          "required": true,
+          "placeholder": "path to .mobileprovision"
+        }
+      ]
     }
   ],
   "dependencies": {
