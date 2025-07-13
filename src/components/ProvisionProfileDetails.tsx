@@ -77,7 +77,7 @@ export function ProfileActions({ profile }: { profile: ProvisioningProfile }) {
           content={profile.filePath}
           shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
         />
-        <Action.CopyToClipboard title="Copy UUID" content={profile.UUID} />
+        <Action.CopyToClipboard title="Copy Uuid" content={profile.UUID} />
         <Action.CopyToClipboard title="Copy Team ID" content={profile.TeamIdentifier[0]} />
         {profile.Entitlements["application-identifier"] && (
           <Action.CopyToClipboard

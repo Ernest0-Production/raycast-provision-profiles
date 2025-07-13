@@ -57,10 +57,10 @@ function ProfileListItem({
   const accessories: List.Item.Accessory[] = isShowingDetail
     ? []
     : [
-      { tag: { value: profile.Platform.join(", "), color: Color.SecondaryText } },
-      { tag: { value: profile.Type, color: getProfileTypeColor(profile.Type) } },
-      ...(profile.ExpirationDate < new Date() ? [{ tag: { value: "Expired", color: Color.Red } }] : []),
-    ];
+        { tag: { value: profile.Platform.join(", "), color: Color.SecondaryText } },
+        { tag: { value: profile.Type, color: getProfileTypeColor(profile.Type) } },
+        ...(profile.ExpirationDate < new Date() ? [{ tag: { value: "Expired", color: Color.Red } }] : []),
+      ];
 
   const keywords = [
     ...(profile.ProvisionedDevices ?? []),
