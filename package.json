@@ -7,13 +7,16 @@
   "author": "ernest0n",
   "license": "MIT",
   "categories": [
-    "Developer Tools"
+    "Developer Tools",
+    "System"
   ],
   "keywords": [
     "mobileprovision",
     "certificate",
     "apple",
-    "signing"
+    "signing",
+    "entitlements",
+    "provision profile"
   ],
   "commands": [
     {

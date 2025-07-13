@@ -49,14 +49,6 @@ function MetadataLabels({ profile }: { profile: ProvisioningProfile }) {
   );
 }
 
-export function ListDetailMetadata({ profile }: { profile: ProvisioningProfile }) {
-  return (
-    <Detail.Metadata>
-      <MetadataLabels profile={profile} />
-    </Detail.Metadata>
-  );
-}
-
 export function DetailMetadata({ profile }: { profile: ProvisioningProfile }) {
   return (
     <Detail.Metadata>
@@ -85,7 +77,7 @@ export function ProfileActions({ profile }: { profile: ProvisioningProfile }) {
           content={profile.filePath}
           shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
         />
-        <Action.CopyToClipboard title="Copy Uuid" content={profile.UUID} />
+        <Action.CopyToClipboard title="Copy UUID" content={profile.UUID} />
         <Action.CopyToClipboard title="Copy Team ID" content={profile.TeamIdentifier[0]} />
         {profile.Entitlements["application-identifier"] && (
           <Action.CopyToClipboard
@@ -93,6 +85,13 @@ export function ProfileActions({ profile }: { profile: ProvisioningProfile }) {
             content={profile.Entitlements["application-identifier"]}
           />
         )}
+      </ActionPanel.Section>
+      <ActionPanel.Section>
+        <Action.Trash
+          title="Remove Provision"
+          paths={[profile.filePath]}
+          shortcut={{ modifiers: ["ctrl"], key: "x" }}
+        />
       </ActionPanel.Section>
     </>
   );
