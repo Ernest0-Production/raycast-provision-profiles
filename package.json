@@ -12,18 +12,23 @@
   ],
   "keywords": [
     "mobileprovision",
+    "provision",
+    "profile",
     "certificate",
     "apple",
     "signing",
-    "entitlements",
-    "provision profile"
+    "entitlements"
   ],
   "commands": [
     {
       "name": "show-mobile-provisions",
       "title": "Show Mobile Provisions",
       "description": "Browse and manage all installed .mobileprovision files with detailed information, search, and bulk actions",
-      "mode": "view"
+      "mode": "view",
+      "keywords": [
+        "profiles",
+        "devices"
+      ]
     },
     {
       "name": "dump-provision-profile",
